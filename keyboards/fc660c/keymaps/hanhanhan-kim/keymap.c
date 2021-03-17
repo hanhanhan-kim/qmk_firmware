@@ -20,6 +20,8 @@ enum custom_keycodes {
     SFT_PSCR = SAFE_RANGE,
     ALT_PSCR,
     SPEC_TAB,
+    HOME_LEFT,
+    END_RIGHT,
     TERMINAL_LIN,
     END_ZOOM_CALL_LIN,
     END_ZOOM_CALL_WIN,
@@ -30,6 +32,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   static uint16_t my_hash_timer;
 
   switch (keycode) {
+
   case SFT_PSCR:
       if (record->event.pressed) {
         // ROI screenshot on linux:
@@ -91,7 +94,45 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
     return false; // We handled this keypress
 
+  case HOME_LEFT:
+
+    // If tapped, will send Left Arrow, if held down, will send Home
+
+    if(record->event.pressed) { // When HOME_LEFT is pressed for ANY duration:
+        my_hash_timer = timer_read();
+
+      } else { // When HOME_LEFT is EVER released
+
+        if (timer_elapsed(my_hash_timer) < TAPPING_TERM) { // If HOME_LEFT was tapped
+          SEND_STRING(SS_TAP(X_LEFT)); 
+
+        } else { // If HOME_LEFT was held down:         
+          tap_code(KC_HOME);
+        }
+      }
+    return false; // We handled this keypress
+
+
+  case END_RIGHT:
+
+    // If tapped, will send Right Arrow, if held down, will send End
+
+    if(record->event.pressed) { // When END_RIGHT is pressed for ANY duration:
+        my_hash_timer = timer_read();
+
+      } else { // When END_RIGHT is EVER released
+
+        if (timer_elapsed(my_hash_timer) < TAPPING_TERM) { // If END_RIGHT was tapped
+          SEND_STRING(SS_TAP(X_RIGHT)); 
+
+        } else { // If END_RIGHT was held down:          
+          tap_code(KC_END);
+        }
+      }
+    return false; // We handled this keypress
+
   }
+
   return true;
 };
 
@@ -129,7 +170,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         SPEC_TAB, KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,   KC_LBRC,KC_RBRC,KC_BSLS,       KC_DEL,
         TG(1),  KC_A,   KC_S,   KC_D,   KC_F,   KC_G,   KC_H,   KC_J,   KC_K,   KC_L,   KC_SCLN,KC_QUOT,     KC_ENT,
         OSM(MOD_LSFT),KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_N,   KC_M,   KC_COMM,KC_DOT, KC_SLSH, OSM(MOD_RSFT),         KC_UP,
-        OSM(MOD_LCTL),OSM(MOD_LGUI),OSM(MOD_LALT),          KC_SPC,          OSM(MOD_RALT),OSM(MOD_LCTL),OSL(1),     KC_LEFT,KC_DOWN,KC_RGHT
+        OSM(MOD_LCTL),OSM(MOD_LGUI),OSM(MOD_LALT),          KC_SPC,          OSM(MOD_RALT),OSM(MOD_LCTL),OSL(1),     HOME_LEFT,KC_DOWN,END_RIGHT
     ),
   [1] = LAYOUT(
         KC_GRV, KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,  KC_F7,  KC_F8,  KC_F9,  KC_F10, KC_F11, KC_F12, _______,     _______,
