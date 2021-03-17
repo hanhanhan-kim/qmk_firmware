@@ -19,57 +19,83 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 enum custom_keycodes {
     SFT_PSCR = SAFE_RANGE,
     ALT_PSCR,
+    SPEC_TAB,
     TERMINAL_LIN,
     END_ZOOM_CALL_LIN,
     END_ZOOM_CALL_WIN,
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-    case SFT_PSCR:
-        if (record->event.pressed) {
-          // ROI screenshot on linux:
-          SEND_STRING(SS_DOWN(X_LSFT) SS_TAP(X_PSCREEN) SS_UP(X_LSFT));
-        } else {
-            // when keycode SFT_PSCR is released
-        }
-        break;
 
-    case ALT_PSCR:
-        if (record->event.pressed) {
-          // App-specific screenshot on linux:
-          SEND_STRING(SS_DOWN(X_LALT) SS_TAP(X_PSCREEN) SS_UP(X_LALT));
-        } else {
-            // when keycode ALT_PSCR is released
-        }
-        break;
+  static uint16_t my_hash_timer;
 
-    case TERMINAL_LIN:
-        if (record->event.pressed) {
-          // Open up terminal on linux:
-          SEND_STRING(SS_DOWN(X_LCTL) SS_LALT("t") SS_UP(X_LCTL));
-        } else {
-            // when keycode TERMINAL_LIN is released
-        }
-        break;
+  switch (keycode) {
+  case SFT_PSCR:
+      if (record->event.pressed) {
+        // ROI screenshot on linux:
+        SEND_STRING(SS_DOWN(X_LSFT) SS_TAP(X_PSCREEN) SS_UP(X_LSFT));
+      } else {
+          // when keycode SFT_PSCR is released
+      }
+      break;
 
-    case END_ZOOM_CALL_LIN:
-        if (record->event.pressed) {
-          // End Zoom call on Linux:
-          SEND_STRING(SS_LALT("q") SS_TAP(X_ENTER));
-        }
-        break;
+  case ALT_PSCR:
+      if (record->event.pressed) {
+        // App-specific screenshot on linux:
+        SEND_STRING(SS_DOWN(X_LALT) SS_TAP(X_PSCREEN) SS_UP(X_LALT));
+      } else {
+          // when keycode ALT_PSCR is released
+      }
+      break;
+      
+  case TERMINAL_LIN:
+      if (record->event.pressed) {
+        // Open up terminal on linux:
+        SEND_STRING(SS_DOWN(X_LCTL) SS_LALT("t") SS_UP(X_LCTL));
+      } else {
+          // when keycode TERMINAL_LIN is released
+      }
+      break;
 
-    case END_ZOOM_CALL_WIN:
-        if (record->event.pressed) {
-          // End Zoom call on Windows:
-          SEND_STRING(SS_LALT("q") SS_TAP(X_TAB) SS_TAP(X_ENTER));
-        }
-        break;
+  case END_ZOOM_CALL_LIN:
+      if (record->event.pressed) {
+        // End Zoom call on Linux:
+        SEND_STRING(SS_LALT("q") SS_TAP(X_ENTER));
+      }
+      break;
 
-    }
-    return true;
+  case END_ZOOM_CALL_WIN:
+      if (record->event.pressed) {
+        // End Zoom call on Windows:
+        SEND_STRING(SS_LALT("q") SS_TAP(X_TAB) SS_TAP(X_ENTER));
+      }
+      break;
+
+  case SPEC_TAB:
+
+    // If tapped, will send Tab, if held down, will send Shift + Tab
+
+    if(record->event.pressed) { // When SPEC_TAB is pressed for ANY duration:
+        my_hash_timer = timer_read();
+
+      } else { // When SPEC_TAB is EVER released
+
+        if (timer_elapsed(my_hash_timer) < TAPPING_TERM) { // If SPEC_TAB was tapped
+          SEND_STRING(SS_TAP(X_TAB)); 
+
+        } else { // If SPEC_TAB was held down:          
+          register_code(KC_LSFT);
+          tap_code(KC_TAB);
+          unregister_code(KC_LSFT); 
+        }
+      }
+    return false; // We handled this keypress
+
+  }
+  return true;
 };
+
+
 
 void keyboard_pre_init_user(void) {
   // Call the keyboard pre init code.
@@ -99,11 +125,11 @@ bool led_update_kb(led_t led_state) {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT(
-        KC_GRAVE, KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   KC_6,   KC_7,   KC_8,   KC_9,   KC_0,   KC_MINS,KC_EQL, KC_BSPC,     KC_HOME,
-        KC_TAB, KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,   KC_LBRC,KC_RBRC,KC_BSLS,       KC_END,
+        KC_GRAVE, KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   KC_6,   KC_7,   KC_8,   KC_9,   KC_0,   KC_MINS,KC_EQL, KC_BSPC,     KC_PSCREEN,
+        SPEC_TAB, KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,   KC_LBRC,KC_RBRC,KC_BSLS,       KC_DEL,
         TG(1),  KC_A,   KC_S,   KC_D,   KC_F,   KC_G,   KC_H,   KC_J,   KC_K,   KC_L,   KC_SCLN,KC_QUOT,     KC_ENT,
-        OSM(MOD_LSFT),KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_N,   KC_M,   KC_COMM,KC_DOT, KC_SLSH,KC_ESCAPE,        KC_UP,
-        KC_LCTL,KC_LGUI,KC_LALT,          KC_SPC,                       SFT_PSCR,KC_CAPS,KC_DEL,               KC_LEFT,KC_DOWN,KC_RGHT
+        OSM(MOD_LSFT),KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_N,   KC_M,   KC_COMM,KC_DOT, KC_SLSH, OSM(MOD_RSFT),         KC_UP,
+        OSM(MOD_LCTL),OSM(MOD_LGUI),OSM(MOD_LALT),          KC_SPC,          OSM(MOD_RALT),OSM(MOD_LCTL),OSL(1),     KC_LEFT,KC_DOWN,KC_RGHT
     ),
   [1] = LAYOUT(
         KC_GRV, KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,  KC_F7,  KC_F8,  KC_F9,  KC_F10, KC_F11, KC_F12, _______,     _______,
