@@ -286,6 +286,40 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 
 // When tap dancing, remember to preface the command in the keymap with TD(). E.g. TD(X_CTL)
 
+// COMBOING----------------------------------------------------------------------------
+// Like "gallops", but with the thumb leading: 
+enum combos {
+  SPACE_F_LPAR,
+  SPACE_D_LBRAK,
+  SPACE_S_LBRAC,
+  SPACE_A_LCAR,
+  SPACE_J_RPAR,
+  SPACE_K_RBRAK,
+  SPACE_L_RBRAC,
+  SPACE_SCLN_RCAR,
+};
+
+const uint16_t PROGMEM spacef_combo[] = {KC_SPACE, KC_F, COMBO_END};
+const uint16_t PROGMEM spaced_combo[] = {KC_SPACE, KC_D, COMBO_END};
+const uint16_t PROGMEM spaces_combo[] = {KC_SPACE, KC_S, COMBO_END};
+const uint16_t PROGMEM spacea_combo[] = {KC_SPACE, KC_A, COMBO_END};
+
+const uint16_t PROGMEM spacej_combo[] = {KC_SPACE, KC_J, COMBO_END};
+const uint16_t PROGMEM spacek_combo[] = {KC_SPACE, KC_K, COMBO_END};
+const uint16_t PROGMEM spacel_combo[] = {KC_SPACE, KC_L, COMBO_END};
+const uint16_t PROGMEM spacescln_combo[] = {KC_SPACE, KC_SCLN, COMBO_END};
+
+combo_t key_combos[COMBO_COUNT] = {
+  [SPACE_F_LPAR] = COMBO(spacef_combo, KC_LPRN),
+  [SPACE_D_LBRAK] = COMBO(spaced_combo, KC_LBRC),
+  [SPACE_S_LBRAC] = COMBO(spaces_combo, KC_LCBR),
+  [SPACE_A_LCAR] = COMBO(spacea_combo, KC_LABK),
+  
+  [SPACE_J_RPAR] = COMBO(spacej_combo, KC_RPRN),
+  [SPACE_K_RBRAK] = COMBO(spacek_combo, KC_RBRC),
+  [SPACE_L_RBRAC] = COMBO(spacel_combo, KC_RCBR),
+  [SPACE_SCLN_RCAR] = COMBO(spacescln_combo, KC_RABK)
+};
 // INDICATOR LED------------------------------------------------------------------------
 
 void keyboard_pre_init_user(void) {
