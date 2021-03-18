@@ -20,9 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 enum custom_keycodes {
   
     UNTAB_TAB=SAFE_RANGE,
-    HOME_A,
-    END_D,
-    ESC_GRAVE,
     SFT_PSCR_PSCR,
     HOME_END,
 
@@ -105,25 +102,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
       return false; // We handled this keypress
 
-    case ESC_GRAVE:
-
-      // If tapped, will send Grave (back tick), if held down, will send ESC
-      // Shift + Grave will still return tilde
-
-      if(record->event.pressed) { // When ESC_GRAVE is pressed for ANY duration:
-          my_hash_timer = timer_read();
-
-        } else { // When ESC_GRAVE is EVER released
-
-          if (timer_elapsed(my_hash_timer) < TAPPING_TERM) { // If ESC_GRAVE was tapped
-            SEND_STRING(SS_TAP(X_GRAVE)); 
-
-          } else { // If ESC_GRAVE was held down:          
-            tap_code(KC_ESC);
-          }
-        }
-      return false; // We handled this keypress
-
     case HOME_END:
 
       // If tapped, will send Home, if held down, will send End
@@ -166,6 +144,7 @@ enum {
 // Tap dance enums
 enum {
     PY_DOCS, // I put this tap vs. hold behaviour as a tap dance instead of a macro, because of a bug that swaps typed chars
+    ESC_GRAVE_MD_DOCS,
     SOME_OTHER_DANCE
 };
 
@@ -174,6 +153,8 @@ uint8_t cur_dance(qk_tap_dance_state_t *state);
 // For the x tap dance. Put it here so it can be used in any keymap
 void py_docs_finished(qk_tap_dance_state_t *state, void *user_data);
 void py_docs_reset(qk_tap_dance_state_t *state, void *user_data);
+void esc_grave_md_docs_finished(qk_tap_dance_state_t *state, void *user_data);
+void esc_grave_md_docs_reset(qk_tap_dance_state_t *state, void *user_data);
 
 /* Return an integer that corresponds to what kind of tap dance should be executed.
  *
@@ -225,8 +206,13 @@ uint8_t cur_dance(qk_tap_dance_state_t *state) {
     } else return 8; // Magic number. At some point this method will expand to work for more presses
 }
 
-// Create an instance of 'tap' for the 'x' tap dance.
+// Create an instance of 'tap' for each of the tap dances:
 static tap py_docs_tap_state = {
+    .is_press_action = true,
+    .state = 0
+};
+
+static tap esc_grave_md_docs_tap_state = {
     .is_press_action = true,
     .state = 0
 };
@@ -251,25 +237,62 @@ void py_docs_finished(qk_tap_dance_state_t *state, void *user_data) {
         // case DOUBLE_TAP: register_code(KC_B); break; // for example
         // case TRIPLE_TAP: register_code(KC_3); break; // for example
 
-        // Last case is for fast typing. Assuming your key is `f`:
-        // For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
-        // In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
-        case DOUBLE_SINGLE_TAP: tap_code(KC_X); register_code(KC_X);
+        // // Last case is for fast typing. Assuming your key is `f`:
+        // // For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
+        // // In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
+        // case DOUBLE_SINGLE_TAP: tap_code(KC_X); register_code(KC_X);
     }
 }
 
 void py_docs_reset(qk_tap_dance_state_t *state, void *user_data) {
     switch (py_docs_tap_state.state) {
         case SINGLE_TAP: unregister_code(KC_QUOTE); break;
-        case SINGLE_HOLD: clear_mods(); break;
+        case SINGLE_HOLD: clear_keyboard(); break;
         // case DOUBLE_TAP: unregister_code(KC_B); break; // for example
         // case TRIPLE_TAP: unregister_code(KC_3); break; // for example
     }
     py_docs_tap_state.state = 0;
 }
 
+void esc_grave_md_docs_finished(qk_tap_dance_state_t *state, void *user_data) {
+    esc_grave_md_docs_tap_state.state = cur_dance(state);
+    switch (esc_grave_md_docs_tap_state.state) {
+        case SINGLE_TAP: tap_code(KC_GRAVE); break;  
+        case SINGLE_HOLD: 
+          tap_code(KC_GRAVE);
+          tap_code(KC_GRAVE);
+          tap_code(KC_GRAVE);
+          tap_code(KC_ENTER);
+          tap_code(KC_ENTER);
+          tap_code(KC_GRAVE);
+          tap_code(KC_GRAVE);
+          tap_code(KC_GRAVE);
+          tap_code(KC_UP);
+          tap_code(KC_ESC);
+          break;
+        case DOUBLE_TAP: register_code(KC_ESC); break;
+        // case TRIPLE_TAP: register_code(KC_3); break; // for example
+
+        // // Last case is for fast typing. Assuming your key is `f`:
+        // // For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
+        // // In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
+        // case DOUBLE_SINGLE_TAP: tap_code(KC_X); register_code(KC_X);
+    }
+}
+
+void esc_grave_md_docs_reset(qk_tap_dance_state_t *state, void *user_data) {
+    switch (esc_grave_md_docs_tap_state.state) {
+        case SINGLE_TAP: unregister_code(KC_QUOTE); break;
+        case SINGLE_HOLD: clear_keyboard(); break;
+        case DOUBLE_TAP: unregister_code(KC_ESC); break;
+        // case TRIPLE_TAP: unregister_code(KC_3); break; // for example
+    }
+    esc_grave_md_docs_tap_state.state = 0;
+}
+
 qk_tap_dance_action_t tap_dance_actions[] = {
-    [PY_DOCS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, py_docs_finished, py_docs_reset)
+    [PY_DOCS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, py_docs_finished, py_docs_reset),
+    [ESC_GRAVE_MD_DOCS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, esc_grave_md_docs_finished, esc_grave_md_docs_reset)
 };
 
 // When tap dancing, remember to preface the command in the keymap with TD(). E.g. TD(X_CTL)
@@ -307,7 +330,7 @@ bool led_update_kb(led_t led_state) {
 // KEYMAP-----------------------------------------------------------------------------
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT(
-        ESC_GRAVE, KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   KC_6,   KC_7,   KC_8,   KC_9,   KC_0,   KC_MINS,KC_EQL, KC_BSPC,     SFT_PSCR_PSCR,
+        TD(ESC_GRAVE_MD_DOCS), KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   KC_6,   KC_7,   KC_8,   KC_9,   KC_0,   KC_MINS,KC_EQL, KC_BSPC,     SFT_PSCR_PSCR,
         UNTAB_TAB, KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,   KC_LBRC,KC_RBRC,KC_BSLS,       KC_DEL,
         TG(1),  KC_A,   KC_S,   KC_D,   KC_F,   KC_G,   KC_H,   KC_J,   KC_K,   KC_L,   KC_SCLN,TD(PY_DOCS),     KC_ENT,
         KC_LSFT,KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_N,   KC_M,   KC_COMM,KC_DOT, KC_SLSH, KC_RSFT,         KC_UP,
