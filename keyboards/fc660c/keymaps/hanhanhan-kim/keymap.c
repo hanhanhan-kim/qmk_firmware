@@ -162,7 +162,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 // TAP DANCES------------------------------------------------------------------------
 enum {
-    CT_3X_QUOTE // Will work for both ' and " TODO: ONLY WORKS FOR SINGLE QUOTE, BC SHIFT IS HELD DOWN
+    CT_3X_QUOTE // Will work for both ' and "
 };
 
 void dance_3x_quote_finished(qk_tap_dance_state_t *state, void *user_data) {
@@ -172,11 +172,6 @@ void dance_3x_quote_finished(qk_tap_dance_state_t *state, void *user_data) {
         register_code(KC_QUOTE); // For double tap
         register_code(KC_QUOTE);
         register_code(KC_QUOTE);
-        register_code(KC_ENTER);
-        register_code(KC_QUOTE); 
-        register_code(KC_QUOTE);
-        register_code(KC_QUOTE);
-        register_code(KC_UP);
         register_code(KC_ENTER);
     }
 }
@@ -188,11 +183,6 @@ void dance_3x_quote_reset(qk_tap_dance_state_t *state, void *user_data) {
         unregister_code(KC_QUOTE); // For double tap
         unregister_code(KC_QUOTE);
         unregister_code(KC_QUOTE);
-        unregister_code(KC_ENTER);
-        unregister_code(KC_QUOTE); 
-        unregister_code(KC_QUOTE);
-        unregister_code(KC_QUOTE);
-        unregister_code(KC_UP);
         unregister_code(KC_ENTER);
     }
 }
