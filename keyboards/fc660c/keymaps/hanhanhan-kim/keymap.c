@@ -287,16 +287,26 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 // When tap dancing, remember to preface the command in the keymap with TD(). E.g. TD(X_CTL)
 
 // COMBOING----------------------------------------------------------------------------
-// Like "gallops", but with the thumb leading: 
+// When two buttons are pressed (very near) simultaneously, a piece of punctuation appears
 enum combos {
+
   SPACE_F_LPAR,
   SPACE_D_LBRAK,
   SPACE_S_LBRAC,
   SPACE_A_LCAR,
+
   SPACE_J_RPAR,
   SPACE_K_RBRAK,
   SPACE_L_RBRAC,
   SPACE_SCLN_RCAR,
+
+  SPACE_W_HTAG,
+  SPACE_E_USCR,
+  SPACE_R_DASH,
+  
+  SPACE_U_PLUS,
+  SPACE_I_EQL,
+
 };
 
 const uint16_t PROGMEM spacef_combo[] = {KC_SPACE, KC_F, COMBO_END};
@@ -309,7 +319,16 @@ const uint16_t PROGMEM spacek_combo[] = {KC_SPACE, KC_K, COMBO_END};
 const uint16_t PROGMEM spacel_combo[] = {KC_SPACE, KC_L, COMBO_END};
 const uint16_t PROGMEM spacescln_combo[] = {KC_SPACE, KC_SCLN, COMBO_END};
 
+const uint16_t PROGMEM spacew_combo[] = {KC_SPACE, KC_W, COMBO_END};
+const uint16_t PROGMEM spacee_combo[] = {KC_SPACE, KC_E, COMBO_END};
+const uint16_t PROGMEM spacer_combo[] = {KC_SPACE, KC_R, COMBO_END};
+
+const uint16_t PROGMEM spaceu_combo[] = {KC_SPACE, KC_U, COMBO_END};
+const uint16_t PROGMEM spacei_combo[] = {KC_SPACE, KC_I, COMBO_END};
+
+
 combo_t key_combos[COMBO_COUNT] = {
+
   [SPACE_F_LPAR] = COMBO(spacef_combo, KC_LPRN),
   [SPACE_D_LBRAK] = COMBO(spaced_combo, KC_LBRC),
   [SPACE_S_LBRAC] = COMBO(spaces_combo, KC_LCBR),
@@ -318,7 +337,15 @@ combo_t key_combos[COMBO_COUNT] = {
   [SPACE_J_RPAR] = COMBO(spacej_combo, KC_RPRN),
   [SPACE_K_RBRAK] = COMBO(spacek_combo, KC_RBRC),
   [SPACE_L_RBRAC] = COMBO(spacel_combo, KC_RCBR),
-  [SPACE_SCLN_RCAR] = COMBO(spacescln_combo, KC_RABK)
+  [SPACE_SCLN_RCAR] = COMBO(spacescln_combo, KC_RABK),
+
+  [SPACE_W_HTAG] = COMBO(spacew_combo, KC_HASH),
+  [SPACE_E_USCR] = COMBO(spacee_combo, KC_UNDS),
+  [SPACE_R_DASH] = COMBO(spacer_combo, KC_PMNS),
+
+  [SPACE_U_PLUS] = COMBO(spaceu_combo, KC_PPLS),
+  [SPACE_I_EQL] = COMBO(spacei_combo, KC_PEQL), 
+
 };
 // INDICATOR LED------------------------------------------------------------------------
 
