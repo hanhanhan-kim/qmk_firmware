@@ -15,6 +15,5 @@
  */
 
 #pragma once
-#define TAPPING_TERM 175
 
 // place overrides here

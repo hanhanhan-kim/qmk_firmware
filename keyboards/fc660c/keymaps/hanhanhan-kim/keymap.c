@@ -18,12 +18,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // MACROS------------------------------------------------------------------------
 enum custom_keycodes {
-    SFT_PSCR = SAFE_RANGE,
-    ALT_PSCR,
-    UNTAB_TAB,
-    HOME_LEFT,
-    END_RIGHT,
+  
+    UNTAB_TAB=SAFE_RANGE,
+    HOME_A,
+    END_D,
     ESC_GRAVE,
+    SFT_PSCR_PSCR,
+    HOME_END,
+
     TERMINAL_LIN,
     END_ZOOM_CALL_LIN,
     END_ZOOM_CALL_WIN,
@@ -37,24 +39,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     // REGULAR MACROS:
 
-    case SFT_PSCR:
-        if (record->event.pressed) {
-          // ROI screenshot on linux:
-          SEND_STRING(SS_DOWN(X_LSFT) SS_TAP(X_PSCREEN) SS_UP(X_LSFT));
-        } else {
-            // when keycode SFT_PSCR is released
-        }
-        break;
-
-    case ALT_PSCR:
-        if (record->event.pressed) {
-          // App-specific screenshot on linux:
-          SEND_STRING(SS_DOWN(X_LALT) SS_TAP(X_PSCREEN) SS_UP(X_LALT));
-        } else {
-            // when keycode ALT_PSCR is released
-        }
-        break;
-        
     case TERMINAL_LIN:
         if (record->event.pressed) {
           // Open up terminal on linux:
@@ -99,39 +83,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           }
         }
       return false; // We handled this keypress
-    
-    case HOME_LEFT:
 
-      // If tapped, will send Left Arrow, if held down, will send Home
+    case SFT_PSCR_PSCR:
 
-      if(record->event.pressed) { // When HOME_LEFT is pressed for ANY duration:
+      // If tapped, will send PrintScreen, if held down, will send Shift + PrintScreen 
+      // ()
+
+      if(record->event.pressed) { // When SFT_PSCR_PSCR is pressed for ANY duration:
           my_hash_timer = timer_read();
 
-        } else { // When HOME_LEFT is EVER released
+        } else { // When SFT_PSCR_PSCR is EVER released
 
-          if (timer_elapsed(my_hash_timer) < TAPPING_TERM) { // If HOME_LEFT was tapped
-            SEND_STRING(SS_TAP(X_LEFT)); 
+          if (timer_elapsed(my_hash_timer) < TAPPING_TERM) { // If SFT_PSCR_PSCR was tapped
+            SEND_STRING(SS_TAP(X_PSCR)); 
 
-          } else { // If HOME_LEFT was held down:         
-            tap_code(KC_HOME);
-          }
-        }
-      return false; // We handled this keypress
-
-    case END_RIGHT:
-
-      // If tapped, will send Right Arrow, if held down, will send End
-
-      if(record->event.pressed) { // When END_RIGHT is pressed for ANY duration:
-          my_hash_timer = timer_read();
-
-        } else { // When END_RIGHT is EVER released
-
-          if (timer_elapsed(my_hash_timer) < TAPPING_TERM) { // If END_RIGHT was tapped
-            SEND_STRING(SS_TAP(X_RIGHT)); 
-
-          } else { // If END_RIGHT was held down:          
-            tap_code(KC_END);
+          } else { // If SFT_PSCR_PSCR was held down:
+            register_code(KC_LSFT);
+            tap_code(KC_PSCR);
+            unregister_code(KC_LSFT);
           }
         }
       return false; // We handled this keypress
@@ -155,43 +124,155 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
       return false; // We handled this keypress
 
+    case HOME_END:
+
+      // If tapped, will send Home, if held down, will send End
+
+      if(record->event.pressed) { // When HOME_END is pressed for ANY duration:
+          my_hash_timer = timer_read();
+
+        } else { // When HOME_END is EVER released
+
+          if (timer_elapsed(my_hash_timer) < TAPPING_TERM) { // If HOME_END was tapped
+            SEND_STRING(SS_TAP(X_HOME)); 
+
+          } else { // If HOME_END was held down:          
+            tap_code(KC_END);
+          }
+        }
+      return false; // We handled this keypress
+
   }
 
   return true;
 };
 
-// TAP DANCES------------------------------------------------------------------------
+// ADVANCED TAP DANCING----------------------------------------------------------------
+typedef struct {
+    bool is_press_action;
+    uint8_t state;
+} tap;
+
 enum {
-    CT_3X_QUOTE // Will work for both ' and "
+    SINGLE_TAP = 1,
+    SINGLE_HOLD,
+    DOUBLE_TAP,
+    DOUBLE_HOLD, // Doesn't seem to work doesn't
+    DOUBLE_SINGLE_TAP, // Send two single taps ... Doesn't seem to work
+    TRIPLE_TAP,
+    TRIPLE_HOLD // Doesn't seem to work
 };
 
-void dance_3x_quote_finished(qk_tap_dance_state_t *state, void *user_data) {
+// Tap dance enums
+enum {
+    PY_DOCS, // I put this tap vs. hold behaviour as a tap dance instead of a macro, because of a bug that swaps typed chars
+    SOME_OTHER_DANCE
+};
+
+uint8_t cur_dance(qk_tap_dance_state_t *state);
+
+// For the x tap dance. Put it here so it can be used in any keymap
+void py_docs_finished(qk_tap_dance_state_t *state, void *user_data);
+void py_docs_reset(qk_tap_dance_state_t *state, void *user_data);
+
+/* Return an integer that corresponds to what kind of tap dance should be executed.
+ *
+ * How to figure out tap dance state: interrupted and pressed.
+ *
+ * Interrupted: If the state of a dance dance is "interrupted", that means that another key has been hit
+ *  under the tapping term. This is typically indicitive that you are trying to "tap" the key.
+ *
+ * Pressed: Whether or not the key is still being pressed. If this value is true, that means the tapping term
+ *  has ended, but the key is still being pressed down. This generally means the key is being "held".
+ *
+ * One thing that is currenlty not possible with qmk software in regards to tap dance is to mimic the "permissive hold"
+ *  feature. In general, advanced tap dances do not work well if they are used with commonly typed letters.
+ *  For example "A". Tap dances are best used on non-letter keys that are not hit while typing letters.
+ *
+ * Good places to put an advanced tap dance:
+ *  z,q,x,j,k,v,b, any function key, home/end, comma, semi-colon
+ *
+ * Criteria for "good placement" of a tap dance key:
+ *  Not a key that is hit frequently in a sentence
+ *  Not a key that is used frequently to double tap, for example 'tab' is often double tapped in a terminal, or
+ *    in a web form. So 'tab' would be a poor choice for a tap dance.
+ *  Letters used in common words as a double. For example 'p' in 'pepper'. If a tap dance function existed on the
+ *    letter 'p', the word 'pepper' would be quite frustating to type.
+ *
+ * For the third point, there does exist the 'DOUBLE_SINGLE_TAP', however this is not fully tested
+ *
+ */
+uint8_t cur_dance(qk_tap_dance_state_t *state) {
     if (state->count == 1) {
-        register_code(KC_QUOTE); // For regular tap
-    } else {
-        register_code(KC_QUOTE); // For double tap
-        register_code(KC_QUOTE);
-        register_code(KC_QUOTE);
-        register_code(KC_ENTER);
+        if (state->interrupted || !state->pressed) return SINGLE_TAP;
+        // Key has not been interrupted, but the key is still held. Means you want to send a 'HOLD'.
+        else return SINGLE_HOLD;
+    } else if (state->count == 2) {
+        // DOUBLE_SINGLE_TAP is to distinguish between typing "pepper", and actually wanting a double tap
+        // action when hitting 'pp'. Suggested use case for this return value is when you want to send two
+        // keystrokes of the key, and not the 'double tap' action/macro.
+        if (state->interrupted) return DOUBLE_SINGLE_TAP;
+        else if (state->pressed) return DOUBLE_HOLD;
+        else return DOUBLE_TAP;
+    }
+
+    // Assumes no one is trying to type the same letter three times (at least not quickly).
+    // If your tap dance key is 'KC_W', and you want to type "www." quickly - then you will need to add
+    // an exception here to return a 'TRIPLE_SINGLE_TAP', and define that enum just like 'DOUBLE_SINGLE_TAP'
+    if (state->count == 3) {
+        if (state->interrupted || !state->pressed) return TRIPLE_TAP;
+        else return TRIPLE_HOLD;
+    } else return 8; // Magic number. At some point this method will expand to work for more presses
+}
+
+// Create an instance of 'tap' for the 'x' tap dance.
+static tap py_docs_tap_state = {
+    .is_press_action = true,
+    .state = 0
+};
+
+void py_docs_finished(qk_tap_dance_state_t *state, void *user_data) {
+    py_docs_tap_state.state = cur_dance(state);
+    switch (py_docs_tap_state.state) {
+        case SINGLE_TAP: register_code(KC_QUOTE); break;  
+        case SINGLE_HOLD: 
+          tap_code(KC_QUOTE);
+          tap_code(KC_QUOTE);
+          tap_code(KC_QUOTE);
+          tap_code(KC_ENTER);
+          tap_code(KC_ENTER);
+          tap_code(KC_QUOTE);
+          tap_code(KC_QUOTE);
+          tap_code(KC_QUOTE);
+          tap_code(KC_UP);
+          tap_code(KC_ESC);
+          break;
+
+        // case DOUBLE_TAP: register_code(KC_B); break; // for example
+        // case TRIPLE_TAP: register_code(KC_3); break; // for example
+
+        // Last case is for fast typing. Assuming your key is `f`:
+        // For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
+        // In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
+        case DOUBLE_SINGLE_TAP: tap_code(KC_X); register_code(KC_X);
     }
 }
 
-void dance_3x_quote_reset(qk_tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1) {
-        unregister_code(KC_QUOTE); // For regular tap
-    } else {
-        unregister_code(KC_QUOTE); // For double tap
-        unregister_code(KC_QUOTE);
-        unregister_code(KC_QUOTE);
-        unregister_code(KC_ENTER);
+void py_docs_reset(qk_tap_dance_state_t *state, void *user_data) {
+    switch (py_docs_tap_state.state) {
+        case SINGLE_TAP: unregister_code(KC_QUOTE); break;
+        case SINGLE_HOLD: clear_mods(); break;
+        // case DOUBLE_TAP: unregister_code(KC_B); break; // for example
+        // case TRIPLE_TAP: unregister_code(KC_3); break; // for example
     }
+    py_docs_tap_state.state = 0;
 }
 
-// All tap dance functions go here: 
 qk_tap_dance_action_t tap_dance_actions[] = {
-    [CT_3X_QUOTE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_3x_quote_finished, dance_3x_quote_reset),
+    [PY_DOCS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, py_docs_finished, py_docs_reset)
 };
 
+// When tap dancing, remember to preface the command in the keymap with TD(). E.g. TD(X_CTL)
 
 // INDICATOR LED------------------------------------------------------------------------
 
@@ -220,17 +301,17 @@ bool led_update_kb(led_t led_state) {
         // TODO: Fix LED light-up for OSL(1)
     }
 
-    return res;
+    return res; 
 }
 
 // KEYMAP-----------------------------------------------------------------------------
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT(
-        ESC_GRAVE, KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   KC_6,   KC_7,   KC_8,   KC_9,   KC_0,   KC_MINS,KC_EQL, KC_BSPC,     KC_PSCREEN,
+        ESC_GRAVE, KC_1,   KC_2,   KC_3,   KC_4,   KC_5,   KC_6,   KC_7,   KC_8,   KC_9,   KC_0,   KC_MINS,KC_EQL, KC_BSPC,     SFT_PSCR_PSCR,
         UNTAB_TAB, KC_Q,   KC_W,   KC_E,   KC_R,   KC_T,   KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,   KC_LBRC,KC_RBRC,KC_BSLS,       KC_DEL,
-        TG(1),  KC_A,   KC_S,   KC_D,   KC_F,   KC_G,   KC_H,   KC_J,   KC_K,   KC_L,   KC_SCLN,TD(CT_3X_QUOTE),     KC_ENT,
-        OSM(MOD_LSFT),KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_N,   KC_M,   KC_COMM,KC_DOT, KC_SLSH, OSM(MOD_RSFT),         KC_UP,
-        KC_LCTL,KC_LGUI,KC_LALT,          KC_SPC,          KC_RALT,KC_LCTL,OSL(1),     HOME_LEFT,KC_DOWN,END_RIGHT
+        TG(1),  KC_A,   KC_S,   KC_D,   KC_F,   KC_G,   KC_H,   KC_J,   KC_K,   KC_L,   KC_SCLN,TD(PY_DOCS),     KC_ENT,
+        KC_LSFT,KC_Z,   KC_X,   KC_C,   KC_V,   KC_B,   KC_N,   KC_M,   KC_COMM,KC_DOT, KC_SLSH, KC_RSFT,         KC_UP,
+        KC_LCTL,KC_LGUI,KC_LALT,          KC_SPC,          KC_RALT,KC_LCTL,HOME_END,                     KC_LEFT,KC_DOWN,KC_RIGHT
     ),
   [1] = LAYOUT(
         KC_GRV, KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,  KC_F7,  KC_F8,  KC_F9,  KC_F10, KC_F11, KC_F12, _______,     _______,
