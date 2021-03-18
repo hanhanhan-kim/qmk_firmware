@@ -23,9 +23,19 @@ enum custom_keycodes {
     SFTPSCR_PSCR,
     HOME_END,
 
-    TERMINAL_LIN,
+    START_TERMINAL,
+
+    START_SIGNAL,
+    START_VSCODE,
+    START_CHROME,
+    START_SPOTIFY, // TODO: buggy
+    START_ARDUINO,
+    START_TYPORA, // TODO: buggy
+    START_FILES,
+
     END_ZOOM_CALL_LIN,
     END_ZOOM_CALL_WIN,
+
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -33,13 +43,66 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
 
   // REGULAR MACROS:
-
-    case TERMINAL_LIN:
+    case START_SIGNAL:
         if (record->event.pressed) {
-          // Open up terminal on linux:
-          SEND_STRING(SS_DOWN(X_LCTL) SS_LALT("t") SS_UP(X_LCTL));
-        } else {
-            // when keycode TERMINAL_LIN is released
+          // Start up Signal on either Windows or Linux:
+          writePin(B6, 1); // turn off LED (hacky ...)
+          SEND_STRING(SS_TAP(X_LGUI) SS_DELAY(100) "signal" SS_DELAY(100) SS_TAP(X_ENTER) SS_DELAY(100));
+          layer_off(1);
+        }
+        break;
+
+    case START_VSCODE:
+        if (record->event.pressed) {
+          // Start up VSCode on either Windows or Linux:
+          writePin(B6, 1); // turn off LED (hacky ...)
+          SEND_STRING(SS_TAP(X_LGUI) SS_DELAY(100) "vscode" SS_DELAY(100) SS_TAP(X_ENTER) SS_DELAY(100));
+          layer_off(1);
+        }
+        break;
+
+    case START_CHROME:
+        if (record->event.pressed) {
+          // Start up Spotify on either Windows or Linux:
+          writePin(B6, 1); // turn off LED (hacky ...)
+          SEND_STRING(SS_TAP(X_LGUI) SS_DELAY(100) "chrome" SS_DELAY(100) SS_TAP(X_ENTER) SS_DELAY(100));
+          layer_off(1);
+        }
+        break;
+    
+    case START_SPOTIFY:
+        if (record->event.pressed) {
+          // Start up Spotify on either Windows or Linux:
+          writePin(B6, 1); // turn off LED (hacky ...)
+          SEND_STRING(SS_TAP(X_LGUI) SS_DELAY(100) "spotify" SS_DELAY(100) SS_TAP(X_ENTER) SS_DELAY(100));
+          layer_off(1);
+        }
+        break;
+
+    case START_ARDUINO:
+        if (record->event.pressed) {
+          // Start up Arduino on either Windows or Linux:
+          writePin(B6, 1); // turn off LED (hacky ...)
+          SEND_STRING(SS_TAP(X_LGUI) SS_DELAY(100) "arduino" SS_DELAY(100) SS_TAP(X_ENTER) SS_DELAY(100));
+          layer_off(1);
+        }
+        break;
+
+    case START_TYPORA:
+        if (record->event.pressed) {
+          // Start up Typora on either Windows or Linux:
+          writePin(B6, 1); // turn off LED (hacky ...)
+          SEND_STRING(SS_TAP(X_LGUI) SS_DELAY(100) "typora" SS_DELAY(100) SS_TAP(X_ENTER) SS_DELAY(100));
+          layer_off(1);
+        }
+        break;
+    
+    case START_FILES:
+        if (record->event.pressed) {
+          // Start up VSCode on either Windows or Linux:
+          writePin(B6, 1); // turn off LED (hacky ...)
+          tap_code(KC_MY_COMPUTER);
+          layer_off(1);
         }
         break;
 
@@ -108,6 +171,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           }
         }
       return false; // We handled this keypress
+
+    case START_TERMINAL:
+        if (record->event.pressed) {
+          my_hash_timer = timer_read();
+          
+        } else {
+            if (timer_elapsed(my_hash_timer) < TAPPING_TERM) { // If START_TERMINAL was tapped
+              // Open up terminal on Linux:
+              writePin(B6, 1); // turn off LED (hacky ...)
+              SEND_STRING(SS_DOWN(X_LCTL) SS_LALT("t") SS_UP(X_LCTL));
+              layer_off(1);  
+            } else { // If START_TERMINAL was held down, open up git bash on Windows:
+              writePin(B6, 1); // turn off LED (hacky ...)
+              SEND_STRING(SS_TAP(X_LGUI) SS_DELAY(100) "gitbash" SS_DELAY(100) SS_TAP(X_ENTER) SS_DELAY(100));
+              layer_off(1);
+            }
+        }
+        break;
 
   }
 
@@ -371,8 +452,10 @@ bool led_update_kb(led_t led_state) {
         // writePin(B3, !led_state.compose);
         // writePin(B4, !led_state.kana);
         writePin(B6, !layer_state_is(1)); // if Layer 1 is enabled, turn on LED
-        // TODO: Fix LED light-up for OSL(1)
-    }
+
+        // TODO: Fix LED light-up for when layer is turned off programmatically!!
+        
+    } 
 
     return res; 
 }
@@ -387,10 +470,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LCTL,KC_LGUI,KC_LALT,          KC_SPC,          KC_RALT,KC_LCTL,HOME_END,                     KC_LEFT,KC_DOWN,KC_RIGHT
     ),
   [1] = LAYOUT(
-        KC_GRV, KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,  KC_F7,  KC_F8,  KC_F9,  KC_F10, KC_F11, KC_F12, _______,     _______,
-        _______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,     _______,
-        TG(1)  ,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,KC_MEDIA_PLAY_PAUSE,
-        _______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,_______,                               KC__VOLUP,
+        TD(ESC_GRAVE_MD_DOCS), KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,  KC_F6,  KC_F7,  KC_F8,  KC_F9,  KC_F10, KC_F11, KC_F12, _______,     _______,
+        _______,_______,_______,_______,_______,START_TERMINAL,START_TYPORA,_______,_______,_______,_______,_______,_______,_______,     _______,
+        TG(1)  ,START_ARDUINO,START_SIGNAL,_______,_______,_______,_______,_______,_______,_______,_______,_______,KC_MEDIA_PLAY_PAUSE,
+        _______,_______,START_FILES,START_CHROME,START_VSCODE,_______,_______,START_SPOTIFY,_______,_______,_______,_______,                               KC__VOLUP,
         _______,_______,_______,                _______,                _______,_______,_______,                  KC_MEDIA_PREV_TRACK,KC__VOLDOWN,KC_MEDIA_NEXT_TRACK
     )
 };
