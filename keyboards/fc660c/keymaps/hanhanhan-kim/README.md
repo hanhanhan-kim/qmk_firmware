@@ -121,7 +121,7 @@ In summary, the programming shortcuts are:
 | -------------------------------------------------------- | --------------------- |
 | quote (hold)                                             | '''<br /><br />'''    |
 | double quote (hold)                                      | """<br /><br />"""    |
-| backtick (hold)                                          | ````<br /><br />````` |
+| backtick (hold)                                          | ```<br /><br />```` |
 | backtick (tap)                                           | `                     |
 | backtick (double-tap)                                    | Esc                   |
 | whatever key is to the left of the left arrow key (tap)  | Home                  |
