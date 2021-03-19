@@ -29,9 +29,9 @@ enum custom_keycodes {
     START_SIGNAL,
     START_VSCODE,
     START_CHROME,
-    START_SPOTIFY, // TODO: buggy
+    START_SPOTIFY, 
     START_ARDUINO,
-    START_TYPORA, // TODO: buggy
+    START_TYPORA,
     START_FILES,
 
     END_ZOOM_CALL_LIN,
@@ -48,7 +48,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (record->event.pressed) {
           // Start up Signal on either Windows or Linux:
           writePin(B6, 1); // turn off LED (hacky ...)
-          SEND_STRING(SS_TAP(X_LGUI) SS_DELAY(100) "signal" SS_DELAY(100) SS_TAP(X_ENTER) SS_DELAY(100));
+          SEND_STRING(SS_DELAY(100) SS_TAP(X_LGUI) SS_DELAY(100) "signal" SS_DELAY(100) SS_TAP(X_ENTER) SS_DELAY(100));
           layer_off(1);
         }
         break;
@@ -57,7 +57,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (record->event.pressed) {
           // Start up VSCode on either Windows or Linux:
           writePin(B6, 1); // turn off LED (hacky ...)
-          SEND_STRING(SS_TAP(X_LGUI) SS_DELAY(100) "vscode" SS_DELAY(100) SS_TAP(X_ENTER) SS_DELAY(100));
+          SEND_STRING(SS_DELAY(100) SS_TAP(X_LGUI) SS_DELAY(100) "vscode" SS_DELAY(100) SS_TAP(X_ENTER) SS_DELAY(100));
           layer_off(1);
         }
         break;
@@ -66,7 +66,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (record->event.pressed) {
           // Start up Spotify on either Windows or Linux:
           writePin(B6, 1); // turn off LED (hacky ...)
-          SEND_STRING(SS_TAP(X_LGUI) SS_DELAY(100) "chrome" SS_DELAY(100) SS_TAP(X_ENTER) SS_DELAY(100));
+          SEND_STRING(SS_DELAY(100) SS_TAP(X_LGUI) SS_DELAY(100) "chrome" SS_DELAY(100) SS_TAP(X_ENTER) SS_DELAY(100));
           layer_off(1);
         }
         break;
@@ -75,7 +75,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (record->event.pressed) {
           // Start up Spotify on either Windows or Linux:
           writePin(B6, 1); // turn off LED (hacky ...)
-          SEND_STRING(SS_TAP(X_LGUI) SS_DELAY(100) "spotify" SS_DELAY(100) SS_TAP(X_ENTER) SS_DELAY(100));
+          SEND_STRING(SS_DELAY(100) SS_TAP(X_LGUI) SS_DELAY(100) "spotify" SS_DELAY(100) SS_TAP(X_ENTER) SS_DELAY(100));
           layer_off(1);
         }
         break;
@@ -84,7 +84,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (record->event.pressed) {
           // Start up Arduino on either Windows or Linux:
           writePin(B6, 1); // turn off LED (hacky ...)
-          SEND_STRING(SS_TAP(X_LGUI) SS_DELAY(100) "arduino" SS_DELAY(100) SS_TAP(X_ENTER) SS_DELAY(100));
+          SEND_STRING(SS_DELAY(100) SS_TAP(X_LGUI) SS_DELAY(100) "arduino" SS_DELAY(100) SS_TAP(X_ENTER) SS_DELAY(100));
           layer_off(1);
         }
         break;
@@ -93,7 +93,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (record->event.pressed) {
           // Start up Typora on either Windows or Linux:
           writePin(B6, 1); // turn off LED (hacky ...)
-          SEND_STRING(SS_TAP(X_LGUI) SS_DELAY(100) "typora" SS_DELAY(100) SS_TAP(X_ENTER) SS_DELAY(100));
+          SEND_STRING(SS_DELAY(100) SS_TAP(X_LGUI) SS_DELAY(100) "typora" SS_DELAY(100) SS_TAP(X_ENTER) SS_DELAY(100));
           layer_off(1);
         }
         break;
@@ -442,7 +442,7 @@ combo_t key_combos[COMBO_COUNT] = {
   [SPACE_R_DASH] = COMBO(spacer_combo, KC_PMNS),
 
   [SPACE_U_PLUS] = COMBO(spaceu_combo, KC_PPLS),
-  [SPACE_I_EQL] = COMBO(spacei_combo, KC_PEQL), 
+  [SPACE_I_EQL] = COMBO(spacei_combo, KC_EQL), 
 
 };
 // INDICATOR LED------------------------------------------------------------------------
@@ -470,7 +470,7 @@ bool led_update_kb(led_t led_state) {
         // writePin(B4, !led_state.kana);
         writePin(B6, !layer_state_is(1)); // if Layer 1 is enabled, turn on LED
 
-        // TODO: Fix LED light-up for when layer is turned off programmatically!!
+        // TODO: Fix LED light-up for when layer is turned off programmatically!! Do manually with each command for now (very hacky)
         
     } 
 
