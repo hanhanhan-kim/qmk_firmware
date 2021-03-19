@@ -1,6 +1,6 @@
 # Han's Keymap for Large Spacebar Keyboards
 
-This keymap has two main goals:
+This keymap has three main goals:
 
 1. Encourages thumb multi-functionality, even though the keyboard has a full-sized spacebar.
 2. Encourages resting the fingers on the home position. 
