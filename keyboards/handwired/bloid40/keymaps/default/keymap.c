@@ -102,7 +102,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 * ,-----------------------------------------------------------------------------------.
  * |RESET |      |      |      |      |      |      |      |      |      |      | DEL  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |PScrn |      |      |      |      |      |      |      |      |      |
+ * |      |      |PScrn |      |      |AGNorm|AGSwap|      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |      |      |      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -111,7 +111,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_ADJUST] = LAYOUT_planck_mit(
     RESET,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO, KC_DEL,
-    KC_NO,    KC_NO,    ROI_PSCR, KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO, KC_NO,
+    KC_NO,    KC_NO,    ROI_PSCR, KC_NO,    KC_NO,    AG_NORM,AG_SWAP,    KC_NO,    KC_NO,    KC_NO,    KC_NO, KC_NO,
     KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO,    KC_NO, KC_NO,
     EEP_RST,  KC_NO,    KC_NO,    KC_NO,    KC_TRNS,        KC_NO,        KC_TRNS,  KC_NO,    KC_NO,    KC_NO, OUT_AUTO
 )
