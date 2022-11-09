@@ -160,13 +160,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case GUI_A:
-          return TAPPING_TERM + 50;
+          return TAPPING_TERM + 25;
         case GUI_SCLN:
-          return TAPPING_TERM + 50;
-        case ALT_S:
-          return TAPPING_TERM + 40;
-        case ALT_L:
-          return TAPPING_TERM + 40;
+          return TAPPING_TERM + 25;
+        case SFT_D:
+          return TAPPING_TERM - 25;
+        case SFT_K:
+          return TAPPING_TERM - 25;
         default:
           return TAPPING_TERM;
     }
