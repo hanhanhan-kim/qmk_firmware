@@ -21,10 +21,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 
-enum layers { _QWERTY, 
-              _CHIVALRY,
-              _MOST_GAMES,
-              _NOTHING,
+enum layers { _TYPING, 
+              _EASY_NUMBERS,
+              _RIGHT_FKEYS,
+              _REGULAR,
               _LOWER, 
               _RAISE, 
               _NAV,
@@ -51,55 +51,55 @@ enum layers { _QWERTY,
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   
-  [_QWERTY] = LAYOUT_split_3x6_3(
+  [_TYPING] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                             ,---------------------------------------------------------.
      KC_TAB,   KC_Q,   KC_W,    KC_E,     KC_R,     KC_T,                                   KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,      KC_BSPC,
   //|--------+--------+--------+--------+--------+--------|                             |---------+--------+--------+--------+----------+---------|
      KC_ESC,   GUI_A,  ALT_S,   SFT_D,    CTL_F,    KC_G,                                   KC_H,   CTL_J,    SFT_K,   ALT_L,  GUI_SCLN,   KC_QUOT,
   //|--------+--------+--------+--------+--------+--------|                             |---------+--------+--------+--------+----------+---------|
-     KC_LSFT,  KC_Z,   KC_X,    KC_C,     KC_V,     KC_B,                                   KC_N,    KC_M,  KC_COMM,  KC_DOT,  KC_SLSH,   TO(_CHIVALRY),
+     KC_LSFT,  KC_Z,   KC_X,    KC_C,     KC_V,     KC_B,                                   KC_N,    KC_M,  KC_COMM,  KC_DOT,  KC_SLSH,   TO(_EASY_NUMBERS),
   //|--------+--------+--------+--------+--------+----------+----------|   |----------+-----------+--------+--------+--------+----------+---------|
                                           LOWER,  NAV_SPACE,  ALT_BSPC,       KC_ENT,   NAV_SPACE,   RAISE
                                       //`------------------------------'    `-------------------------------'
   ),
   
-  // CHIVALRY 2
-  [_CHIVALRY] = LAYOUT_split_3x6_3(
+  // Bottom Row is Numbers
+  [_EASY_NUMBERS] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       KC_TAB,    KC_Q,   KC_W,    KC_R,    KC_E,    KC_V,                         KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSPC,
+       KC_TAB,    KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                         KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSPC,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
         KC_C,     KC_A,    KC_S,    KC_D,    KC_F,   KC_G,                         KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        KC_1,     KC_2,    KC_3,    KC_4,    KC_5,  KC_ESC,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  TO(_MOST_GAMES),
+        KC_1,     KC_2,    KC_3,    KC_4,    KC_5,  KC_6,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  TO(_RIGHT_FKEYS),
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LCTL, KC_SPC,  KC_LALT,     XXXXXXX,   XXXXXXX, XXXXXXX
+                                          KC_LCTL, KC_SPC,  KC_LALT,     KC_ENT,  KC_ESC,  KC_TAB
                                       //`--------------------------'  `--------------------------'
 
   ),
   
-  // MOST GAMES 
-  [_MOST_GAMES] = LAYOUT_split_3x6_3(
+  // Right side is F keys 
+  [_RIGHT_FKEYS] = LAYOUT_split_3x6_3(
     //,-----------------------------------------------------.                             ,---------------------------------------------------------.
      KC_TAB,   KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                                   KC_F1,    KC_F2,   KC_F3,    KC_F4,    KC_F5,    KC_F6,
   //|--------+--------+--------+--------+--------+--------|                             |---------+--------+--------+--------+----------+---------|
      KC_QUOT,   KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                                  KC_F7,    KC_F8,   KC_F9,    KC_F10,   KC_F11,   KC_F12,
   //|--------+--------+--------+--------+--------+--------|                             |---------+--------+--------+--------+----------+---------|
-     KC_LSFT,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,                                   KC_N,    KC_M,    KC_COMM,  KC_DOT,  KC_SLSH,   TO(_NOTHING),
+     KC_LSFT,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,                                   KC_1,     KC_2,    KC_3,     KC_4,     KC_5, TO(_REGULAR),
   //|--------+--------+--------+--------+--------+----------+----------|   |----------+-----------+--------+--------+--------+----------+---------|
-                                         KC_LCTL,  KC_SPC,  KC_LALT,         XXXXXXX,   XXXXXXX,     KC_A
+                                         KC_LCTL,  KC_SPC,  KC_LALT,         KC_ENT,   KC_ESC,     KC_TAB
                                       //`------------------------------'    `-------------------------------'
   ),
 
-  // NOTHING YET
-  [_NOTHING] = LAYOUT_split_3x6_3(
+  // Regular QWERTY but no numbers or home row mods, and right thumb keys are gaming
+  [_REGULAR] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                             ,--------------------------------------------------------------.
      KC_TAB,   KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                                   KC_Y,    KC_U,     KC_I,    KC_O,    KC_P,      KC_BSPC,
   //|--------+--------+--------+--------+--------+--------|                             |---------+--------+--------+--------+----------+--------------|
      KC_ESC,   KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                                   KC_H,    KC_J,     KC_K,    KC_L,    KC_SCLN,   KC_QUOT,
   //|--------+--------+--------+--------+--------+--------|                             |---------+--------+--------+--------+----------+--------------|
-     KC_LSFT,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,                                   KC_N,    KC_M,    KC_COMM,  KC_DOT,  KC_SLSH,   TO(_QWERTY),
+     KC_LSFT,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,                                   KC_N,    KC_M,    KC_COMM,  KC_DOT,  KC_SLSH,   TO(_TYPING),
   //|--------+--------+--------+--------+--------+----------+----------|   |----------+-----------+--------+--------+--------+----------+--------------|
-                                          XXXXXXX,  XXXXXXX,   XXXXXXX,       XXXXXXX,   XXXXXXX,     KC_B
+                                          KC_LCTL, KC_SPC,    KC_LALT,        KC_ENT,    KC_ESC,   KC_TAB
                                       //`------------------------------'    `-------------------------------'
   ),
 
@@ -150,29 +150,29 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
   return rotation;
 }
 
-#define L_QWERTY 0
-#define L_CHIVALRY 2
-#define L_MOST_GAMES 4
-#define L_NOTHING 8
+#define L_TYPING 0
+#define L_EASY_NUMBERS 2
+#define L_RIGHT_FKEYS 4
+#define L_REGULAR 8
 
 void oled_render_layer_state(void) {
     oled_write_P(PSTR("Layer: "), false);
     switch (layer_state) {
-        case L_QWERTY:
-            oled_write_ln_P(PSTR("Qwerty"), false);
+        case L_TYPING:
+            oled_write_ln_P(PSTR("Typing"), false);
             break;
-        case L_CHIVALRY:
-            oled_write_ln_P(PSTR("Chivalry"), false);
+        case L_EASY_NUMBERS:
+            oled_write_ln_P(PSTR("Bottom row is numbers 1-6"), false);
             break;
-        case L_MOST_GAMES:
-            oled_write_ln_P(PSTR("Most games"), false);
+        case L_RIGHT_FKEYS:
+            oled_write_ln_P(PSTR("Right side is F keys, bottom right is numbers 1-5"), false);
             break;
-        case L_NOTHING:
+        case L_REGULAR:
         // case L_ADJUST:
         // case L_ADJUST|L_LOWER:
         // case L_ADJUST|L_RAISE:
         // case L_ADJUST|L_LOWER|L_RAISE:
-            oled_write_ln_P(PSTR("Nothing yet"), false);
+            oled_write_ln_P(PSTR("QWERTY but no #s or homerow mods; right thumb keys are gaming"), false);
             break;
     }
 }
