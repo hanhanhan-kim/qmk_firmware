@@ -1,0 +1,30 @@
+// Copyright 2023 Han Kim (@hanhanhan-kim)
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+#pragma once
+
+// For a good home row mod experience:
+// Prevent normal rollover on alphas from accidentally triggering mods
+#define IGNORE_MOD_TAP_INTERRUPT 
+// Enable rapid switch from tap to hold, disables double tap hold auto-repeat
+// may have to modify this so it's not global
+#define TAPPING_FORCE_HOLD 
+
+/* Set 0 if debouncing isn't needed */
+#define DEBOUNCE 0
+
+/*
+ * Feature disable options
+ *  These options are also useful to firmware size reduction.
+ */
+
+/* disable debug print */
+//#define NO_DEBUG
+
+/* disable print */
+//#define NO_PRINT
+
+/* disable action features */
+//#define NO_ACTION_LAYER
+//#define NO_ACTION_TAPPING
+//#define NO_ACTION_ONESHOT
