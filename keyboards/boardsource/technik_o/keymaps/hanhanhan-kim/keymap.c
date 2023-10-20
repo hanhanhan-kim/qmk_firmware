@@ -69,7 +69,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Esc  |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |  '   |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |SftEnt|
+ * | Caps |   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |SftEnt|
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Play | LCtrl| LGUI | LAlt | Lower| Space| Space| Raise| Left | Down |  Up  |Right |
  * `-----------------------------------------------------------------------------------'
@@ -77,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = LAYOUT_ortho_4x12(
     KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,      KC_Y,        KC_U,    KC_I,    KC_O,    KC_P,     KC_BSPC,
     KC_ESC,  GUI_A,   ALT_S,   SFT_D,   CTL_F,   KC_G,      KC_H,        CTL_J,   SFT_K,   ALT_L,   GUI_SCLN, KC_QUOT,
-    KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,      KC_N,        KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  KC_SFTENT,
+    KC_CAPS, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,      KC_N,        KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  KC_SFTENT,
     KC_MPLY, KC_LCTL, KC_LGUI, KC_LALT, LOWER,   NAV_SPACE, NAV_SPACE,   RAISE,   KC_LEFT, KC_DOWN, KC_UP,    KC_RGHT
 ),
 
@@ -87,7 +87,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Del  |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |   _  |   +  |   {  |   }  |  |   |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Caps |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 | Pscr |      | Home | End  |      |
+ * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 | Pscr |      | Home | End  |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |      |      |      | Prev | Vol- | Vol+ | Next |
  * `-----------------------------------------------------------------------------------'
@@ -95,7 +95,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_LOWER] = LAYOUT_ortho_4x12(
     KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR,  KC_ASTR,  KC_LPRN, KC_RPRN, KC_DEL,
     KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_UNDS,  KC_PLUS,  KC_LCBR, KC_RCBR, KC_PIPE,
-    KC_CAPS, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR,  _______,  KC_HOME, KC_END,  _______,
+    _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR,  _______,  KC_HOME, KC_END,  _______,
     _______, _______, _______, _______, _______, _______, _______, _______,  KC_MPRV,  KC_VOLD, KC_VOLU, KC_MNXT
 ),
 
@@ -105,7 +105,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Del  |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |   -  |   =  |   [  |   ]  |  \   |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Caps |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 | Pscr |      | Home | End  |      |
+ * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 | Pscr |      | Home | End  |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |      |      |      | Prev | Vol- | Vol+ | Next |
  * `-----------------------------------------------------------------------------------'
@@ -113,7 +113,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_RAISE] = LAYOUT_ortho_4x12(
     KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_DEL,
     KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS,
-    KC_CAPS, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR, _______, KC_HOME,  KC_END, _______,
+    _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR, _______, KC_HOME,  KC_END, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, KC_MPRV, KC_VOLD, KC_VOLU, KC_MNXT
 ),
 
@@ -137,20 +137,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Navigation
  * ,-----------------------------------------------------------------------------------.
- * |      |      |      |      |      |      |      |      |      |      |      |      |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |      |      |      |      |      |      |      |      |      |      |      |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
+ * |      |      |      |      |      |      |LeftCl|MouseL|MouseD|MouseU|MouseR|RiteCl|
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * |      |      |      |      |      |      |      | Left | Down |  Up  |Right |      |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |      |      |      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |             |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
- */
+ */ 
 [_NAV] = LAYOUT_ortho_4x12(
-    QK_BOOT, _______, _______, _______, _______, _______, KC_BTN1, KC_MS_L, KC_MS_D,  KC_MS_U, KC_MS_R, KC_BTN2,
+    _______, _______, _______, _______, _______, _______, KC_BTN1, KC_MS_L, KC_MS_D,  KC_MS_U, KC_MS_R, KC_BTN2,
     _______, _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______,
-    EE_CLR , _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______
+    _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______
 )
 
 
