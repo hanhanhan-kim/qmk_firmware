@@ -34,6 +34,6 @@ RGBLIGHT_ENABLE ?= no
 ENCODER_ENABLE = no	
 
 # Build Options - Bluetooth
-# BLUETOOTH_ENABLE = yes  	# Latest QMK ccurrenntly does not have functional Bluetooth. For Bluetooth, use ZMK, not QMK. 
+# BLUETOOTH_ENABLE = yes  	# Latest QMK currenntly does not have functional Bluetooth. For future Bluetooth builds, use ZMK, not QMK. 
 BLUETOOTH = BluefruitLE 	# This part we need to define the correct Bluetooth chipset. 
 # In info.json, set NKRO: false, because as of 2023/10/16, NKRO is not suupported on the nRF1822 Bluetooth chipset

@@ -10,8 +10,8 @@
 // may have to modify this so it's not global
 #define TAPPING_FORCE_HOLD 
 
-/* Set 0 if debouncing isn't needed */
-#define DEBOUNCE 0
+/* Set 0 if debouncing isn't needed. Default is 5. I recommend at least default, especially for handwired builds*/
+#define DEBOUNCE 10
 
 /*
  * Feature disable options
