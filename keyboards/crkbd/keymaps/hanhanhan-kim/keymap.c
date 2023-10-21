@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// A regular Corne that can also play video games!
 
 #include QMK_KEYBOARD_H
 #include <stdio.h>
@@ -84,7 +83,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                             |---------+--------+--------+--------+----------+---------|
      KC_QUOT,   KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                                  KC_F7,    KC_F8,   KC_F9,    KC_F10,   KC_F11,   KC_F12,
   //|--------+--------+--------+--------+--------+--------|                             |---------+--------+--------+--------+----------+---------|
-     KC_LSFT,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,                                   KC_1,     KC_2,    KC_3,     KC_4,     KC_5, TO(_REGULAR),
+     KC_CAPS,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,                                   KC_1,     KC_2,    KC_3,     KC_4,     KC_5, TO(_REGULAR),
   //|--------+--------+--------+--------+--------+----------+----------|   |----------+-----------+--------+--------+--------+----------+---------|
                                          KC_LCTL,  KC_SPC,  KC_LALT,         KC_ENT,   KC_ESC,     KC_TAB
                                       //`------------------------------'    `-------------------------------'
@@ -97,7 +96,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                             |---------+--------+--------+--------+----------+--------------|
      KC_ESC,   KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                                   KC_H,    KC_J,     KC_K,    KC_L,    KC_SCLN,   KC_QUOT,
   //|--------+--------+--------+--------+--------+--------|                             |---------+--------+--------+--------+----------+--------------|
-     KC_LSFT,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,                                   KC_N,    KC_M,    KC_COMM,  KC_DOT,  KC_SLSH,   TO(_TYPING),
+     _______,   KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,                                   KC_N,    KC_M,    KC_COMM,  KC_DOT,  KC_SLSH,   TO(_TYPING),
   //|--------+--------+--------+--------+--------+----------+----------|   |----------+-----------+--------+--------+--------+----------+--------------|
                                           KC_LCTL, KC_SPC,    KC_LALT,        KC_ENT,    KC_ESC,   KC_TAB
                                       //`------------------------------'    `-------------------------------'
@@ -106,14 +105,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_LOWER] = LAYOUT_split_3x6_3(
     KC_TILD, KC_EXLM, KC_AT,  KC_HASH, KC_DLR,  KC_PERC,              KC_CIRC,  KC_AMPR,  KC_ASTR, KC_LPRN, KC_RPRN,  KC_DEL,
     KC_DEL,  KC_F1,   KC_F2,  KC_F3,   KC_F4,   KC_F5,                KC_F6,    KC_UNDS,  KC_PLUS, KC_LCBR, KC_RCBR,  KC_PIPE,
-    KC_CAPS, KC_F7,   KC_F8,  KC_F9,   KC_F10,  KC_F11,               KC_F12,   KC_PSCR,  _______, KC_HOME, KC_END,  _______,
+    _______, KC_F7,   KC_F8,  KC_F9,   KC_F10,  KC_F11,               KC_F12,   KC_PSCR,  _______, KC_HOME, KC_END,  _______,
                               KC_TRNS, KC_TRNS, KC_TRNS,              KC_TRNS,  KC_TRNS,  KC_TRNS
   ),
 
   [_RAISE] = LAYOUT_split_3x6_3(
     KC_GRV,  KC_1,   KC_2,    KC_3,    KC_4,    KC_5,                   KC_6,    KC_7,     KC_8,    KC_9,    KC_0,    KC_DEL,
     KC_DEL,  KC_F1,  KC_F2,   KC_F3,   KC_F4,   KC_5,                   KC_F6,   KC_MINS,  KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS,
-    KC_CAPS, KC_F7,  KC_F8,   KC_F9,   KC_F10,  KC_F11,                 KC_F12,  KC_PSCR,  _______, KC_HOME, KC_END, _______,
+    _______, KC_F7,  KC_F8,   KC_F9,   KC_F10,  KC_F11,                 KC_F12,  KC_PSCR,  _______, KC_HOME, KC_END, _______,
                               KC_TRNS, KC_TRNS, KC_TRNS,                KC_TRNS, KC_TRNS,  KC_TRNS
   ),
 

@@ -38,7 +38,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* number of backlight levels */
 // #define BACKLIGHT_LEVELS 3
 
-/* Set 0 if debouncing isn't needed */
+/* Set 0 if debouncing isn't needed, default is 5 */
 #define DEBOUNCE 5
 
 /* Mechanical locking support. Use KC_LCAP, KC_LNUM or KC_LSCR instead in keymap */
@@ -61,5 +61,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define NO_ACTION_LAYER
 //#define NO_ACTION_TAPPING
 //#define NO_ACTION_ONESHOT
+
+// For a good home row mod experience:
+// Prevent normal rollover on alphas form accidentally triggering mods:
+ #define IGNORE_MOD_TAP_INTERRUPT
+ //Enable rapid switch from tap to hold, disables double tap hold auto-repeat
+ // may have to modify this so it's not global
+ #define TAPPING_FORCE_HOLD
 
 #define USE_SERIAL
