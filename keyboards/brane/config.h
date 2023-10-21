@@ -19,14 +19,19 @@
 //#define NO_ACTION_TAPPING
 //#define NO_ACTION_ONESHOT
 
-// place overrides here ...
+#define DEBOUNCE 5
+
+#define WS2812_DI_PIN D2
+#ifdef WS2812_DI_PIN
+    #define RGBLED_NUM 8
+    #define RGBLIGHT_HUE_STEP 8
+    #define RGBLIGHT_SAT_STEP 8
+    #define RGBLIGHT_VAL_STEP 8
+#endif
 
 // For a good home row mod experience:
+
+// Configure the global tapping term (default: 200ms)
+#define TAPPING_TERM 200
 // Enable rapid switch from tap to hold, disables double tap hold auto-repeat.
 #define QUICK_TAP_TERM 0
-
-/* Rotary Encoder Support */
-#define ENCODERS_PAD_A { D2 } // adjust according to handwiring ... see also the info.json
-#define ENCODERS_PAD_B { D3 } // adjust accoridn g to handwiring ... see al the info.json
-#define ENCODER_RESOLUTION 4
-#define TAP_CODE_DELAY 10

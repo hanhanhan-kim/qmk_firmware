@@ -4,11 +4,8 @@
 #pragma once
 
 // For a good home row mod experience:
-// Prevent normal rollover on alphas from accidentally triggering mods
-#define IGNORE_MOD_TAP_INTERRUPT 
-// Enable rapid switch from tap to hold, disables double tap hold auto-repeat
-// may have to modify this so it's not global
-#define TAPPING_FORCE_HOLD 
+// Enable rapid switch from tap to hold, disables double tap hold auto-repeat.
+#define QUICK_TAP_TERM 0
 
 /* Set 0 if debouncing isn't needed. Default is 5. I recommend at least default, especially for handwired builds*/
 #define DEBOUNCE 10

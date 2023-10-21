@@ -15,7 +15,6 @@
  */
 
 #include QMK_KEYBOARD_H
-#include "muse.h"
 
 enum planck_layers {
   _QWERTY,
@@ -101,7 +100,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Adjust (Lower + Raise)
  *                      v------------------------RGB CONTROL--------------------v
  * ,-----------------------------------------------------------------------------------.
- * |Reset |      |Debug | RGB  |RGBMOD| HUE- | HUE+ | SAT- | SAT+ |BRGTH-|BRGTH+|      |
+ * | BOOT |      |      | RGB  |RGBMOD| HUE- | HUE+ | SAT- | SAT+ |BRGTH-|BRGTH+|      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |AGnorm|AGswap|CGswap|CGnorm|      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -111,7 +110,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_ADJUST] = LAYOUT_ortho_4x12 (
-    RESET,   _______, DEBUG,   RGB_TOG, RGB_MOD, RGB_HUD, RGB_HUI, RGB_SAD, RGB_SAI,  RGB_VAD, RGB_VAI, _______,
+    QK_BOOT, _______, _______, RGB_TOG, RGB_MOD, RGB_HUD, RGB_HUI, RGB_SAD, RGB_SAI,  RGB_VAD, RGB_VAI, _______,
     _______, _______, _______, _______, _______, AG_NORM, AG_SWAP, CG_SWAP, CG_NORM,  _______, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______
