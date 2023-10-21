@@ -22,11 +22,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* Locking resynchronize hack */
 #define LOCKING_RESYNC_ENABLE
 
-<<<<<<< HEAD
 /*RGB Lighting (not matrix)*/
 // #define RGBLIGHT_ANIMATIONS
-=======
->>>>>>> master
 #define WS2812_SPI SPID2
 #define WS2812_SPI_MOSI_PAL_MODE 0
 #define WS2812_SPI_SCK_PAL_MODE 0
@@ -53,8 +50,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define NO_ACTION_ONESHOT
 
 // For a good home row mod experience:
-// Prevent normal rollover on alphas from accidentally triggering mods
-#define IGNORE_MOD_TAP_INTERRUPT 
-// Enable rapid switch from tap to hold, disables double tap hold auto-repeat
-// may have to modify this so it's not global
-#define TAPPING_FORCE_HOLD 
+// Enable rapid switch from tap to hold, disables double tap hold auto-repeat.
+#define QUICK_TAP_TERM 0
