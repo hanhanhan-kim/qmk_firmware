@@ -53,8 +53,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // For a good home row mod experience:
 
 // Configure the global tapping term (default: 200ms)
-#define TAPPING_TERM 225 // normally 200, but this keyboard is using super light choc purpz
-// Prevent normal rollover on alphas from accidentally triggering mods.
-#define IGNORE_MOD_TAP_INTERRUPT
+#define TAPPING_TERM 240 // using light purpz switches
+
 // Enable rapid switch from tap to hold, disables double tap hold auto-repeat.
-#define TAPPING_FORCE_HOLD
+#define QUICK_TAP_TERM 0
