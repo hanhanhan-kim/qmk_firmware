@@ -12,7 +12,7 @@
 
 //-------- CONFIGURATION START --------
 #ifndef FAST_TYPE_WPM
-    #define FAST_TYPE_WPM 45 //Switch to fast animation when over words per minute
+    #define FAST_TYPE_WPM 40 //Switch to fast animation when over words per minute
 #endif
 //-------- CONFIGURATION END--------
 

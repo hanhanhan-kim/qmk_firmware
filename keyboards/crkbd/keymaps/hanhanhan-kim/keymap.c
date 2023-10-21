@@ -107,9 +107,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case SFT_D:
-          return TAPPING_TERM - 10;
+          return TAPPING_TERM;
         case SFT_K:
-          return TAPPING_TERM - 10;
+          return TAPPING_TERM;
         case GUI_A:
           return TAPPING_TERM + 10;
         case GUI_SCLN:
@@ -129,7 +129,6 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
   return rotation;
 }
 #endif
-
 
 #ifdef OLED_ENABLE
 bool oled_task_user(void) {
