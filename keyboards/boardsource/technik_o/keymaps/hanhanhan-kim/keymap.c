@@ -118,8 +118,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 
 /* Adjust (Lower + Raise)
+ *        |------------------------------ RGB COMMANDS --------------------------------|
  * ,-----------------------------------------------------------------------------------.
- * |Reset |      |      |      |      |      |      |      |      |      |      |      |
+ * | Boot |Toggle|Mode+ |Mode- |Hue + |Hue - |Sat + |Sat - |Brite+|Brite-|Spd + |Spd - |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * |      |      |      |      |      |AGNORM|AGSWAP|CGSWAP|CGNORM|      |      |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
@@ -160,13 +161,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case GUI_A:
-          return TAPPING_TERM + 25;
+          return TAPPING_TERM + 20;
         case GUI_SCLN:
-          return TAPPING_TERM + 25;
+          return TAPPING_TERM + 20;
         case SFT_D:
-          return TAPPING_TERM - 25;
+          return TAPPING_TERM - 10;
         case SFT_K:
-          return TAPPING_TERM - 25;
+          return TAPPING_TERM - 10;
         default:
           return TAPPING_TERM;
     }
