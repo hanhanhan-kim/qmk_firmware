@@ -156,59 +156,16 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
-static bool tabbing = false;
-static uint16_t tabtimer;
-#define TABBING_TIMER 750
-
 bool encoder_update_user(uint8_t index, bool clockwise) {
-  if (index == 0) {
-    if (IS_LAYER_ON(_RAISE)) {
-      if (clockwise) {
-        tabtimer = timer_read();
-        if(!tabbing) {
-          register_code(KC_LALT);
-          tabbing = true;
+    if (index == 0) { /* First encoder */
+        if (clockwise) {
+            tap_code(KC_VOLU);
+        } else {
+            tap_code(KC_VOLD);
         }
-        tap_code(KC_TAB);
-      } else {
-        tabtimer = timer_read();
-        if(!tabbing) {
-          register_code(KC_LALT);
-          tabbing = true;
-        }
-
-        register_code(KC_LSFT);
-        tap_code(KC_TAB);
-        unregister_code(KC_LSFT);
-      }
-
-    } else if (IS_LAYER_ON(_LOWER)) {
-      if (clockwise) {
-        tap_code16(C(KC_TAB));
-      } else {
-        tap_code16(S(C(KC_TAB)));
-      } 
-    
-    } else {
-      if (clockwise) {
-        tap_code(KC_VOLU);
-      } else {
-        tap_code(KC_VOLD);
-      }
-    }
-  }
-  return true;
+    } 
+    return false; // returning false overrides the keyboard level function
 }
-
-void matrix_scan_user(void) {
-  if(tabbing) {
-    if (timer_elapsed(tabtimer) > TABBING_TIMER) {
-      unregister_code(KC_LALT);
-      tabbing = false;
-    }
-  }
-}
-
 
 void matrix_init_user(void) {
 
