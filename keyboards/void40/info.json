@@ -2,7 +2,7 @@
     "manufacturer": "Han Kim",
     "keyboard_name": "void40",
     "maintainer": "hanhanhan-kim",
-    "bootloader": "atmel-dfu",
+    "bootloader": "caterina",
     "diode_direction": "COL2ROW",
     "features": {
         "bootmagic": true,
