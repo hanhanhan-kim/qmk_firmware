@@ -28,7 +28,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // Random string
     case RAND_STR:
         if (record->event.pressed) {
-          SEND_STRING("OCo85Uc@tLY40");
+          SEND_STRING("OCo85Uc@tLY44");
         }
         break;
 
@@ -65,12 +65,29 @@ enum torn_layers { _QWERTY,
 #define ALT_L LALT_T(KC_L)
 #define GUI_SCLN RGUI_T(KC_SCLN)
 
-// Random:
-#define ALT_BSPC LALT_T(KC_BSPC)
-// #define S_BSPC LSFT_T(KC_BSPC)
-// #define R_DEL LT(_RAISE, KC_DEL)
-// #define G_ENT LGUI_T(KC_ENT)
-// #define L_SPC LT(_LOWER, KC_SPC)
+// Per-key tapping terms
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case GUI_A:
+          return TAPPING_TERM + 20;
+        case GUI_SCLN:
+          return TAPPING_TERM + 20;
+        case ALT_S:
+          return TAPPING_TERM + 20;
+        case ALT_L:
+          return TAPPING_TERM + 20;
+        case SFT_D:
+          return TAPPING_TERM - 10;
+        case SFT_K:
+          return TAPPING_TERM - 10;
+        case CTL_F:
+          return TAPPING_TERM - 10;
+        case CTL_J:
+          return TAPPING_TERM - 10;
+        default:
+          return TAPPING_TERM;
+    }
+}
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -83,15 +100,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|    |------+------+------+------+------+------|
  * | Caps |   Z  |   X  |   C  |   V  |   B  |    |   N  |   M  |   ,  |   .  |   /  |      |
  * |------+------+------+------+------+------|    |------+------+------+------+------+------|
- *               |Ctrl+  |Lower |Space|Alt  |    |Enter |Space |Raise |      |
- *               |Alt+Del|      | Nav |     |    |      | Nav  |      |      |
+ *               |Ctrl+  |Lower |Space| Alt  |    |Enter |Space |Raise |      |
+ *               |Alt+Del|      | Nav |      |    |      | Nav  |      |      |
  *               `---------------------------'    `---------------------------'
  */
 [_QWERTY] = LAYOUT_split_3x6_4(
     KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,       KC_T,      KC_Y,      KC_U,      KC_I,    KC_O,    KC_P,     KC_BSPC,
     KC_ESC,  GUI_A,   ALT_S,   SFT_D,   CTL_F,      KC_G,      KC_H,      CTL_J,     SFT_K,   ALT_L,   GUI_SCLN, KC_QUOT,
     KC_CAPS, KC_Z,    KC_X,    KC_C,    KC_V,       KC_B,      KC_N,      KC_M,      KC_COMM, KC_DOT,  KC_SLSH,  _______,
-                      CAD,     LOWER,   NAV_SPACE,  ALT_BSPC,  KC_ENT,   NAV_SPACE,  RAISE,   RAND_STR
+                      CAD,     LOWER,   NAV_SPACE,  KC_LALT,  KC_ENT,   NAV_SPACE,  RAISE,   RAND_STR
 ),
 
 /* Lower
@@ -103,7 +120,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | Caps |  F7  |  F8  |  F9  |  F10 |  F11 |    |  F12 | Pscr |      | Home|  End |       |
  * |------+------+------+------+------+------|    |------+------+------+------+------+------|
  *               | ____ |      |      |      |    |      |      |      | ____ |
- *               |      |      |     |      |     |      |      |      |      |
+ *               |      |      |      |      |    |      |      |      |      |
  *               `---------------------------'    `---------------------------'
  */
 [_LOWER] = LAYOUT_split_3x6_4(
@@ -172,22 +189,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
-// Custom per-key tapping terms
-uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case SFT_D:
-          return TAPPING_TERM - 25;
-        case SFT_K:
-          return TAPPING_TERM - 25;
-        case GUI_A:
-          return TAPPING_TERM + 25;
-        case GUI_SCLN:
-          return TAPPING_TERM + 25;
-        default:
-          return TAPPING_TERM;
-    }
-}
-
 // Define ADJUST layer as combo of LOWER and RAISE and assign LEDs
 layer_state_t layer_state_set_user(layer_state_t state) {
     torn_set_led(0, IS_LAYER_ON_STATE(state, _RAISE));
@@ -196,41 +197,18 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
-
-// const uint16_t PROGMEM encoder_keymaps[][2][2] = {
-//     [_QWERTY] =  { { C(S(KC_TAB)), C(KC_TAB) },     { KC_PGDN,      KC_PGUP } },
-//     [_LOWER]  =  { { C(KC_LEFT),   C(KC_RGHT) },    { KC__VOLDOWN,  KC__VOLUP } },
-//     [_RAISE]  =  { { KC_TRNS,      KC_TRNS },       { G(KC_TAB),    G(S(KC_TAB)) } },
-//     [_ADJUST] =  { { KC_TRNS,      KC_TRNS },       { KC_TRNS,      KC_TRNS } },
-// };
-
 // Define encoder functions:
-static bool tabbing = false;
-static uint16_t tabtimer;
-#define TABBING_TIMER 750
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
 
   // Left encoder
   if (index == 0) {
       if (clockwise) {
-        tabtimer = timer_read();
-        if(!tabbing) {
-          register_code(KC_LALT);
-          tabbing = true;
-        }
-        tap_code(KC_TAB);
-      } else {
-        tabtimer = timer_read();
-        if(!tabbing) {
-          register_code(KC_LALT);
-          tabbing = true;
+            tap_code(KC_VOLU);
+        } else {
+            tap_code(KC_VOLD);
         }
 
-        register_code(KC_LSFT);
-        tap_code(KC_TAB);
-        unregister_code(KC_LSFT);
-      }
   // Right encoder
   } else if (index == 1) {
       if (clockwise) {
@@ -239,19 +217,10 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
           tap_code16(S(C(KC_TAB)));
         } 
   }
-  return true;
+
+  return false; // returning false overrides the keyboard level function
 }
 
-void matrix_scan_user(void) {
-  if(tabbing) {
-    if (timer_elapsed(tabtimer) > TABBING_TIMER) {
-      unregister_code(KC_LALT);
-      tabbing = false;
-    }
-  }
+void matrix_init_user(void) {
+
 }
-
-
-// void matrix_init_user(void) {
-
-// }
