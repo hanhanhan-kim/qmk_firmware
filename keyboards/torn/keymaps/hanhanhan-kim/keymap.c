@@ -189,36 +189,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
+// Define encoder functions:
+const uint16_t PROGMEM encoder_keymaps[][2][2] = {
+  /* LAYER          LEFT CW        LEFT CCW          RIGHT CW         RIGHT CCW*/
+    // [_QWERTY] =  { { C(S(KC_TAB)), C(KC_TAB) },     { G(A(KC_LEFT)), G(A(KC_RIGHT)) } },
+    [_QWERTY] =  { { KC_VOLU,      KC_VOLD},        { G(A(KC_LEFT)), G(A(KC_RIGHT)) } },
+    [_LOWER]  =  { { C(KC_LEFT),   C(KC_RGHT) },    { KC_VOLD,       KC_VOLU } },
+    [_RAISE]  =  { { G(KC_LEFT),   G(KC_RGHT) },    { G(KC_TAB),     G(S(KC_TAB)) } },
+    [_ADJUST] =  { { KC_TRNS,      KC_TRNS },       { KC_TRNS,       KC_TRNS } },
+};
+
 // Define ADJUST layer as combo of LOWER and RAISE and assign LEDs
 layer_state_t layer_state_set_user(layer_state_t state) {
     torn_set_led(0, IS_LAYER_ON_STATE(state, _RAISE));
     torn_set_led(1, IS_LAYER_ON_STATE(state, _LOWER));
     torn_set_led(2, IS_LAYER_ON_STATE(state, _NAV));
     return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
-}
-
-// Define encoder functions:
-
-bool encoder_update_user(uint8_t index, bool clockwise) {
-
-  // Left encoder
-  if (index == 0) {
-      if (clockwise) {
-            tap_code(KC_VOLU);
-        } else {
-            tap_code(KC_VOLD);
-        }
-
-  // Right encoder
-  } else if (index == 1) {
-      if (clockwise) {
-          tap_code16(C(KC_TAB));
-        } else {
-          tap_code16(S(C(KC_TAB)));
-        } 
-  }
-
-  return false; // returning false overrides the keyboard level function
 }
 
 void matrix_init_user(void) {

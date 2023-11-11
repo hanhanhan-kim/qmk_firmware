@@ -158,16 +158,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 // Custom per-key tapping terms
+// Per-key tapping terms
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case GUI_A:
           return TAPPING_TERM + 20;
         case GUI_SCLN:
           return TAPPING_TERM + 20;
+        case ALT_S:
+          return TAPPING_TERM + 20;
+        case ALT_L:
+          return TAPPING_TERM + 20;
         case SFT_D:
-          return TAPPING_TERM - 10;
+          return TAPPING_TERM - 5;
         case SFT_K:
-          return TAPPING_TERM - 10;
+          return TAPPING_TERM - 5;
+        case CTL_F:
+          return TAPPING_TERM - 5;
+        case CTL_J:
+          return TAPPING_TERM - 5;
         default:
           return TAPPING_TERM;
     }
@@ -176,3 +185,11 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 layer_state_t layer_state_set_user(layer_state_t state) {
   return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
+
+const uint16_t PROGMEM encoder_keymaps[][2][2] = {
+    /* LAYER         LEFT CW        LEFT CCW           RIGHT CW       RIGHT CCW */
+    [_QWERTY] =  { { KC_VOLU,       KC_VOLD },      { C(KC_Y),       C(KC_Z) } },
+    [_LOWER]  =  { { KC_MNXT,       KC_MPRV},       { A(KC_TAB),    A(S(KC_TAB)) } },
+    [_RAISE]  =  { { KC_MNXT,       KC_MPRV},       { A(KC_TAB),    A(S(KC_TAB))} },
+    [_ADJUST] =  { { _______,      _______      },  { _______,       _______ } },
+};
