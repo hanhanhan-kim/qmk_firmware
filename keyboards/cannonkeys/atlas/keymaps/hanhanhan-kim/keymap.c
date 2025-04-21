@@ -46,6 +46,21 @@ enum layer_names {
 #define ALT_L LALT_T(KC_L)
 #define GUI_SCLN RGUI_T(KC_SCLN)
 
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case SFT_D:
+            return TAPPING_TERM - 100;
+        case SFT_K:
+            return TAPPING_TERM - 100;
+        case CTL_J:
+            return TAPPING_TERM + 100;
+        case CTL_F:
+            return TAPPING_TERM + 100;
+        default:
+            return TAPPING_TERM;
+    }
+}
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Qwerty with homerow mods

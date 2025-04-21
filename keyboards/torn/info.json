@@ -14,6 +14,14 @@
       {"pin_a": "B2", "pin_b": "B1"}
     ]
   },
+  "features": {
+    "bootmagic": true,
+    "command": false,
+    "console": false,
+    "extrakey": true,
+    "mousekey": true,
+    "nkro": true
+  },
   "processor": "atmega328p",
   "bootloader": "usbasploader",
   "layouts": {

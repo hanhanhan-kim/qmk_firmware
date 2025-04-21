@@ -41,11 +41,54 @@ enum layer_names {
 #define ALT_L LALT_T(KC_L)
 #define GUI_SCLN RGUI_T(KC_SCLN)
 
+// Per-key tapping terms
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case SFT_D:
+            return TAPPING_TERM - 50;
+        case SFT_K:
+            return TAPPING_TERM - 50;
+        case CTL_J:
+            return TAPPING_TERM + 50;
+        case CTL_F:
+            return TAPPING_TERM + 50;
+        default:
+            return TAPPING_TERM;
+    }
+}
+
+// Provide custom macros:
+enum custom_keycodes {
+    RAND_STR=SAFE_RANGE,
+    CAD,
+};
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+  switch (keycode) {
+    // Random string
+    case RAND_STR:
+        if (record->event.pressed) {
+          SEND_STRING("OCo85Uc@tLY47");
+        }
+        break;
+
+    // ctrl + alt + del
+    case CAD:
+        if (record->event.pressed)
+        {
+            SEND_STRING(SS_DOWN(X_LCTL) SS_DOWN(X_LALT) SS_DOWN(X_DEL) SS_UP(X_DEL) SS_UP(X_LALT) SS_UP(X_LCTL));
+        }
+        break;
+  }
+  return true;
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_QWERTY] = LAYOUT_ortho(
-        KC_TAB,         KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,        KC_Y,      KC_U,        KC_I,       KC_O,       KC_P,       KC_BSPC,    _______,    RGB_TOG,
-        KC_ESC,         GUI_A,      ALT_S,      SFT_D,      CTL_F,      KC_G,        KC_H,      CTL_J,       SFT_K,      ALT_L,      GUI_SCLN,   KC_QUOT,    _______,
+        KC_TAB,         KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,        KC_Y,      KC_U,        KC_I,       KC_O,       KC_P,       KC_BSPC,    CAD,       RGB_TOG,
+        KC_ESC,         GUI_A,      ALT_S,      SFT_D,      CTL_F,      KC_G,        KC_H,      CTL_J,       SFT_K,      ALT_L,      GUI_SCLN,   KC_QUOT,    RAND_STR,
         KC_CAPS,        KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,        KC_N,      KC_M,        KC_COMM,    KC_DOT,     KC_SLSH,    KC_ENT,     KC_UP,
         KC_MPLY,        KC_LCTL,    KC_LGUI,    KC_LALT,    LOWER,      NAV_SPACE,   NAV_SPACE, RAISE,       _______,    _______,    _______,    KC_LEFT,    KC_DOWN,    KC_RGHT
     ),  
@@ -59,7 +102,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_RAISE] = LAYOUT_ortho(
         KC_GRV,         KC_1,       KC_2,       KC_3,       KC_4,       KC_5,       KC_6,      KC_7,       KC_8,       KC_9,       KC_0,      KC_DEL,     _______,    RGB_RMOD,
-        KC_DEL,         KC_F1,      KC_F2,      KC_F3,      KC_F4,      KC_F5,      KC_F6,     KC_UNDS,    KC_PLUS,    KC_LBRC,    KC_RBRC,   KC_PIPE,    _______,
+        KC_DEL,         KC_F1,      KC_F2,      KC_F3,      KC_F4,      KC_F5,      KC_F6,     KC_MINS,    KC_EQL,     KC_LBRC,    KC_RBRC,   KC_BSLS,    _______,
         _______,        KC_F7,      KC_F8,      KC_F9,      KC_F10,     KC_F11,     KC_F12,    KC_PSCR,    _______,    KC_HOME,    KC_END,    _______,    KC_VOLU,
         _______,        _______,    _______,    _______,    _______,    _______,    _______,   _______,    _______,    _______,    _______,   KC_MPRV,    KC_VOLD,    KC_MNXT
     ),  

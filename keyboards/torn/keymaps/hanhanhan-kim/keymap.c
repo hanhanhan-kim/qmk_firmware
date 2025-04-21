@@ -69,21 +69,21 @@ enum torn_layers { _QWERTY,
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case GUI_A:
-          return TAPPING_TERM + 20;
+          return TAPPING_TERM + 80;
         case GUI_SCLN:
-          return TAPPING_TERM + 20;
+          return TAPPING_TERM + 80;
         case ALT_S:
-          return TAPPING_TERM + 20;
+          return TAPPING_TERM + 80;
         case ALT_L:
-          return TAPPING_TERM + 20;
+          return TAPPING_TERM + 80;
         case SFT_D:
-          return TAPPING_TERM - 10;
+          return TAPPING_TERM;
         case SFT_K:
-          return TAPPING_TERM - 10;
+          return TAPPING_TERM;
         case CTL_F:
-          return TAPPING_TERM - 10;
+          return TAPPING_TERM - 20;
         case CTL_J:
-          return TAPPING_TERM - 10;
+          return TAPPING_TERM - 20;
         default:
           return TAPPING_TERM;
     }
@@ -98,7 +98,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|    |------+------+------+------+------+------|
  * | Esc  |   A  |   S  |   D  |   F  |   G  |    |   H  |   J  |   K  |   L  |   ;  |  '   |
  * |------+------+------+------+------+------|    |------+------+------+------+------+------|
- * | Caps |   Z  |   X  |   C  |   V  |   B  |    |   N  |   M  |   ,  |   .  |   /  |      |
+ * | Caps |   Z  |   X  |   C  |   V  |   B  |    |   N  |   M  |   ,  |   .  |   /  |Enter |
  * |------+------+------+------+------+------|    |------+------+------+------+------+------|
  *               |Ctrl+  |Lower |Space| Alt  |    |Enter |Space |Raise |      |
  *               |Alt+Del|      | Nav |      |    |      | Nav  |      |      |
@@ -107,8 +107,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = LAYOUT_split_3x6_4(
     KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,       KC_T,      KC_Y,      KC_U,      KC_I,    KC_O,    KC_P,     KC_BSPC,
     KC_ESC,  GUI_A,   ALT_S,   SFT_D,   CTL_F,      KC_G,      KC_H,      CTL_J,     SFT_K,   ALT_L,   GUI_SCLN, KC_QUOT,
-    KC_CAPS, KC_Z,    KC_X,    KC_C,    KC_V,       KC_B,      KC_N,      KC_M,      KC_COMM, KC_DOT,  KC_SLSH,  _______,
-                      CAD,     LOWER,   NAV_SPACE,  KC_LALT,  KC_ENT,   NAV_SPACE,  RAISE,   RAND_STR
+    KC_CAPS, KC_Z,    KC_X,    KC_C,    KC_V,       KC_B,      KC_N,      KC_M,      KC_COMM, KC_DOT,  KC_SLSH,  KC_ENTER,
+                      CAD,     LOWER,   NAV_SPACE,  KC_LALT,   KC_ENT,   NAV_SPACE,  RAISE,   RAND_STR
 ),
 
 /* Lower
@@ -191,17 +191,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 // Define encoder functions:
 const uint16_t PROGMEM encoder_keymaps[][2][2] = {
-  /* LAYER          LEFT CW        LEFT CCW          RIGHT CW         RIGHT CCW*/
-    // [_QWERTY] =  { { C(S(KC_TAB)), C(KC_TAB) },     { G(A(KC_LEFT)), G(A(KC_RIGHT)) } },
-    [_QWERTY] =  { { KC_VOLU,      KC_VOLD},        { G(A(KC_LEFT)), G(A(KC_RIGHT)) } },
-    [_LOWER]  =  { { C(KC_LEFT),   C(KC_RGHT) },    { KC_VOLD,       KC_VOLU } },
-    [_RAISE]  =  { { G(KC_LEFT),   G(KC_RGHT) },    { G(KC_TAB),     G(S(KC_TAB)) } },
-    [_ADJUST] =  { { KC_TRNS,      KC_TRNS },       { KC_TRNS,       KC_TRNS } },
+  /* LAYER          LEFT CW        LEFT CCW            RIGHT CW          RIGHT CCW*/
+    [_QWERTY] =  { { KC_VOLU,      KC_VOLD},           { C(KC_Z),        C(KC_Y)} },
+    [_LOWER]  =  { { C(KC_TAB),    S(C(KC_TAB))},      { C(KC_TAB),    S(C(KC_TAB))} },
+    [_RAISE]  =  { { C(KC_TAB),    S(C(KC_TAB))},      { C(KC_TAB),    S(C(KC_TAB))} },
+    [_ADJUST] =  { { KC_TRNS,      KC_TRNS},           { KC_TRNS,        KC_TRNS} },
 };
 
 // Define ADJUST layer as combo of LOWER and RAISE and assign LEDs
 layer_state_t layer_state_set_user(layer_state_t state) {
-    torn_set_led(0, IS_LAYER_ON_STATE(state, _RAISE));
     torn_set_led(1, IS_LAYER_ON_STATE(state, _LOWER));
     torn_set_led(2, IS_LAYER_ON_STATE(state, _NAV));
     return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);

@@ -25,3 +25,6 @@
 // For a good home row mod experience:
 // Enable rapid switch from tap to hold, disables double tap hold auto-repeat.
 #define QUICK_TAP_TERM 0
+
+// For per-key tapping term
+#define TAPPING_TERM_PER_KEY
